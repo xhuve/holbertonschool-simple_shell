@@ -32,7 +32,7 @@ char *which(char *command)
 	return (NULL);
 }
 
-int main(int ac, char *av[])
+int main(void)
 {
 	int count = 0;
 	size_t n = 128;
