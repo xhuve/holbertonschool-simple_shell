@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
 char *which(char *command)
 {
 	char *copy, *token, *path;
@@ -31,6 +32,7 @@ char *which(char *command)
 
 	return (NULL);
 }
+*/
 
 int main(void)
 {
@@ -45,19 +47,15 @@ int main(void)
 		free(buff);
 		return (1);
 	}
-printf("Reached");
 
 
 	token = strtok(buff, "\n");
 
 	while (token != NULL)
 	{
-		if (count == 0)
-		{
-			exec_args[0] = which(token);
-			token = strtok(NULL, "\t");
-			continue;
-		}
+/*		if (count == 0)
+			exec_args[count] = which(token);
+		else */
 		exec_args[count] = token;
 		count++;
 		token = strtok(NULL, "\n");
