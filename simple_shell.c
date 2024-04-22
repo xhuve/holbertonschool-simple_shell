@@ -36,7 +36,7 @@ int main(void)
 {
 	int count = 0;
 	size_t n = 128;
-	char *buff = NULL, *token, *exec_args[n];
+	char *buff = NULL, *token, *exec_args[128];
 
 	printf("#cisfun$ ");
 	if (getline(&buff, &n, stdin) == -1)
