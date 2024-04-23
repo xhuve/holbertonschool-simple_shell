@@ -36,39 +36,49 @@ char *which(char *command)
 
 int main(void)
 {
-	int count = 0;
-	size_t n = 128;
-	char *buff = NULL, *token, *exec_args[128];
-
-	printf("#cisfun$ ");
-	if (getline(&buff, &n, stdin) == -1)
+	while(1)
 	{
-		perror("Error reading input");
-		free(buff);
-		return (1);
+		int count = 0, status;
+		size_t n = 128;
+		char *buff = NULL, *token, *exec_args[128];
+		pid_t child_pid;
+
+		printf("($) ");
+		if (getline(&buff, &n, stdin) == -1)
+		{
+			perror("Error reading input");
+			free(buff);
+			continue;
+		}
+
+
+		token = strtok(buff, "\n");
+
+		while (token != NULL)
+		{
+	/*		if (count == 0)
+				exec_args[count] = which(token);
+			else */
+			exec_args[count] = token;
+			count++;
+			token = strtok(NULL, "\n");
+		}
+
+		exec_args[count] = NULL;
+
+		child_pid = fork();
+
+		if (child_pid == 0)
+		{
+			if(execve(exec_args[0], exec_args, NULL) == -1) 
+			{
+				perror("execve failed");
+				free(buff);
+			}
+		} else 
+		{
+			wait(&status);
+		}
 	}
-
-
-	token = strtok(buff, "\n");
-
-	while (token != NULL)
-	{
-/*		if (count == 0)
-			exec_args[count] = which(token);
-		else */
-		exec_args[count] = token;
-		count++;
-		token = strtok(NULL, "\n");
-	}
-
-	exec_args[count] = NULL;
-
-	if(execve(exec_args[0], exec_args, NULL) == -1) 
-	{
-		perror("execve failed");
-		free(buff);
-		exit(EXIT_FAILURE);
-	}
-
 	return 0;
 }
