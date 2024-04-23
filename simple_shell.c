@@ -6,14 +6,15 @@ int main(void)
 	{
 		char *exec_args[128];
 		
-		if(command_read(exec_args) == -1)
+		if(command_read(exec_args) != 0)
 			exit(EXIT_FAILURE);
 		
-		if(execute(exec_args) == -1)
-		{
-			perror("execute error");
+		if (exec_args[0] == NULL || strspn(exec_args[0], " ") == strlen(exec_args[0]))
+			continue;
+
+		if(execute(exec_args) != 0)
 			exit(EXIT_FAILURE);
-		}
+
 	}
 	return (0);
 }
