@@ -36,6 +36,8 @@ char *which(char *command)
 
 int main(void)
 {
+	while(1)
+	{
 		int count = 0, status;
 		size_t n = 128;
 		char *buff = NULL, *token, *exec_args[128];
@@ -47,7 +49,6 @@ int main(void)
 			perror("Error reading input");
 			free(buff);
 		}
-
 
 		token = strtok(buff, "\n");
 
@@ -70,11 +71,13 @@ int main(void)
 			if(execve(exec_args[0], exec_args, NULL) == -1) 
 			{
 				perror("execve failed");
-				free(buff);
 			}
 		} else 
 		{
 			wait(&status);
 		}
+		free(buff);
+		free(token);
+	}
 	return 0;
 }
