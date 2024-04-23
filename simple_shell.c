@@ -36,8 +36,6 @@ char *which(char *command)
 
 int main(void)
 {
-	while(1)
-	{
 		int count = 0, status;
 		size_t n = 128;
 		char *buff = NULL, *token, *exec_args[128];
@@ -48,7 +46,6 @@ int main(void)
 		{
 			perror("Error reading input");
 			free(buff);
-			continue;
 		}
 
 
@@ -79,6 +76,5 @@ int main(void)
 		{
 			wait(&status);
 		}
-	}
 	return 0;
 }
