@@ -68,6 +68,9 @@ int main(void)
 
 		if (child_pid == 0)
 		{
+			if(exec_args[0] == NULL)
+				continue;
+
 			if(execve(exec_args[0], exec_args, NULL) == -1) 
 			{
 				perror("execve failed");
@@ -78,6 +81,7 @@ int main(void)
 		}
 		free(buff);
 		free(token);
+		free(*exec_args);
 	}
 	return 0;
 }
