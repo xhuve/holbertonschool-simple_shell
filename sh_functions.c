@@ -76,7 +76,7 @@ int execute(char *cmd_arr[])
 
 	if ((child_pid = fork()) == 0)
 	{
-		if(execve(cmd_arr[0], cmd_arr, NULL) == -1) 
+		if(execve(cmd_arr[0], cmd_arr, environ) == -1) 
 		{
 			perror("execve failed");
 			return (-1);
