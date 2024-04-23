@@ -3,7 +3,7 @@
 
 int _printenv(void)
 {
-	int i, j;
+	int i;
 
 	if (environ == NULL)
 		return (-1);
@@ -20,18 +20,21 @@ int _printenv(void)
 char *_getenv(char *var)
 {
 	int i;
+	char *copy;
 
 	if (environ == NULL)
 		return (NULL);
 
-	var = realloc(var, strlen(var) + 1);
-	strcat(var, "=");
+	copy = malloc(strlen(var) + 1);
+	strcpy(copy, var);
+
+	strcat(copy, "=");
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		if(strstr(environ[i], var) != NULL)
+		if(strstr(environ[i], copy) != NULL)
 		{
-			return (environ[i]);
+			return (environ[i] + strlen(copy));
 		}
 	}
 
@@ -80,12 +83,14 @@ int execute(char *cmd_arr[])
 		}
 	} else 
 		wait(&status);
+
+	return (0);
 }
 
 
 int command_read(char *s[])
 {
-	int count = 0, status;
+	int count = 0;
 	size_t n = 128;
 	char *buff = NULL, *token;
 
