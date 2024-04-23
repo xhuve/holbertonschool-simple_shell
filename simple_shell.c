@@ -12,4 +12,5 @@ int main(void)
 		execute(exec_args);
 
 	}
+	return (1);
 }
