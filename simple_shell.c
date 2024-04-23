@@ -9,8 +9,11 @@ int main(void)
 		if(command_read(exec_args) == -1)
 			exit(EXIT_FAILURE);
 		
-		execute(exec_args);
-
+		if(execute(exec_args) == -1)
+		{
+			perror("execute error");
+			exit(EXIT_FAILURE);
+		}
 	}
-	return (1);
+	return (0);
 }
