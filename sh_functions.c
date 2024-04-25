@@ -121,6 +121,7 @@ int command_read(char *s[])
 		token = strtok(NULL, "\t\n");
 	}
 
+	free(token);
 	s[count] = NULL;
 
 	return (0);
