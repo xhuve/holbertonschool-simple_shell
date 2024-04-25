@@ -14,7 +14,7 @@ int main(void)
 
 		if (command_read(exec_args) != 0)
 			exit(EXIT_FAILURE);
-		
+
 		if (*exec_args[0] == '\n')
 			continue;
 

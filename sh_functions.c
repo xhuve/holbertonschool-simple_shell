@@ -41,13 +41,37 @@ char *_getenv(char *var)
 	return (NULL);
 }
 
+void trim_space(char *s)
+{
+	int i, j;
+	char *copy;
+
+	if (s[0] == ' ')
+	{
+		copy = strdup(s);
+
+		while (s[i] == ' ')
+			i++;
+
+		for (j = 0; s[i] != '\0'; j++)
+		{
+			copy[j] = s[i];
+			i++;
+		}
+
+		printf("%s", copy);
+	}
+}
+	
 
 char *command_path(char *cmd)
 {
 	char *copy, *token, *path;
 	struct stat s;
 
-	path = _getenv("PATH");
+	path = _getenv(cmd);
+	if (path == NULL)
+		return (NULL);
 
 	token = strtok(path, ":");
 
@@ -55,8 +79,10 @@ char *command_path(char *cmd)
 	{
 		copy = malloc(strlen(token) + strlen(cmd) + 2);
 		if (copy == NULL)
+		{
+			free(copy);
 			return (NULL);
-
+		}
 		strcpy(copy, token);
 		strcat(copy, "/");
 		strcat(copy, cmd);
@@ -65,6 +91,7 @@ char *command_path(char *cmd)
 			return (copy);
 	}
 
+	free(path);
 	return (NULL);
 }
 
@@ -83,7 +110,7 @@ int execute(char *cmd_arr[])
 		}
 	} else 
 		wait(&status);
-
+	
 	return (0);
 }
 
@@ -116,7 +143,6 @@ int command_read(char *s[])
 		token = strtok(NULL, "\t\n");
 	}
 
-	free(token);
 	s[count] = NULL;
 
 	return (0);
