@@ -19,31 +19,37 @@ int _printenv(void)
 
 char *_getenv(char *var)
 {
-	int i;
+	int i, len;
 	char *copy;
 
 	if (environ == NULL)
 		return (NULL);
 
 	copy = malloc(strlen(var) + 1);
-	strcpy(copy, var);
+	if (copy == NULL)
+		return (NULL);
 
+	strcpy(copy, var);
 	strcat(copy, "=");
+
+	len = strlen(copy);
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
 		if(strstr(environ[i], copy) != NULL)
 		{
-			return (environ[i] + strlen(copy));
+			free(copy);
+			return (environ[i] + len);
 		}
 	}
 
+	free(copy);
 	return (NULL);
 }
 
 void trim_space(char *s)
 {
-	int i, j;
+	int i = 0, j = 0;
 	char *copy;
 
 	if (s[0] == ' ')
@@ -60,6 +66,7 @@ void trim_space(char *s)
 		}
 
 		printf("%s", copy);
+		free(copy);
 	}
 }
 	
@@ -89,6 +96,7 @@ char *command_path(char *cmd)
 
 		if (stat(copy, &s) == 0)
 			return (copy);
+		free(copy);
 	}
 
 	free(path);
@@ -131,7 +139,10 @@ int command_read(char *s[])
 	token = strtok(buff, "\t\n");
 
 	if (strcmp(buff, "exit") == 0)
+	{
+		free(buff);
 		exit(EXIT_SUCCESS);
+	}
 
 	while (token != NULL)
 	{
