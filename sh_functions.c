@@ -96,14 +96,9 @@ int command_read(char *s[])
 
 	if (getline(&buff, &n, stdin) == -1)
 	{
-		if(feof(stdin))
-			exit(0);
-		else
-		{
-			perror("Error reading input");
-			free(buff);
-			return (-1);
-		}
+		perror("Error reading input");
+		free(buff);
+		return (-1);
 	}
 
 	token = strtok(buff, "\t\n");
