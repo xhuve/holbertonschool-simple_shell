@@ -24,6 +24,9 @@ int main(void)
             exit(EXIT_FAILURE);
         }
 
+		if (buff[0] == EOF)
+			continue;
+
 		if (strcmp(buff, "\0") == 0)
 			continue;
 

@@ -16,13 +16,15 @@ void free_args(char *s[])
 
 char *_getenv(char *var)
 {
-	int i, len;
+	int i, len = 0;
 	char *copy;
 
 	if (environ == NULL)
+	{
 		return (NULL);
+	}
 
-	copy = malloc(strlen(var) + 1);
+	copy = malloc(sizeof(char) * strlen(var) + 2);
 	if (copy == NULL)
 		return (NULL);
 
@@ -51,7 +53,7 @@ int execute(char *cmd_arr[])
 
 	if ((child_pid = fork()) == 0)
 	{
-		if(execve(cmd_arr[0], cmd_arr, environ) == -1) 
+		if(execvp(cmd_arr[0], cmd_arr) == -1) 
 		{
 			perror("execve");
             exit(EXIT_FAILURE);
@@ -68,43 +70,6 @@ int execute(char *cmd_arr[])
 	return (0);
 }
 
-char *command_path(char *cmd)
-{
-	char *copy, *token, *path;
-	struct stat s;
-
-	path = _getenv("PATH");
-	if (path == NULL)
-		return (NULL);
-
-	token = strtok(path, ":");
-
-	while(token != NULL)
-	{
-		copy = malloc(strlen(token) + strlen(cmd) + 2);
-		if (copy == NULL)
-		{
-			free(copy);
-			return (NULL);
-		}
-		strcpy(copy, token);
-		strcat(copy, "/");
-		strcat(copy, cmd);
-
-		if (stat(copy, &s) == 0)
-		{
-			return (copy);
-		} else
-			continue;
-
-		free(copy);
-		token = strtok(NULL, ":");
-	}
-	free(path); 
-	return (NULL);
-}
-
-
 int command_tok(char *line)
 {
 	int count = 0;
@@ -114,10 +79,7 @@ int command_tok(char *line)
 
 	while (token != NULL)
 	{
-		if (count == 0)
-			exec_args[count] = command_path(token);
-		else
-			exec_args[count] = token;
+		exec_args[count] = token;
 
 		count++;
 		token = strtok(NULL, " ");
