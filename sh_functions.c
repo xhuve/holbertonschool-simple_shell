@@ -36,14 +36,10 @@ int execute(char *cmd_arr[])
 {
 	int status;
 	pid_t child_pid;
-	char *curr[128];
-
-	curr[0] = cmd_arr[0];
-	curr[1] = NULL;
 
 	if ((child_pid = fork()) == 0)
 	{
-		if(execvp(curr[0], curr) == -1) 
+		if(execvp(cmd_arr[0], cmd_arr) == -1) 
 		{
 			perror("execve");
             exit(EXIT_FAILURE);
