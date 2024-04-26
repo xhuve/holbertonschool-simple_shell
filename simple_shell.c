@@ -27,8 +27,11 @@ int main(void)
 		if (buff[0] == ' ')
 			trim_space(buff);
 
-		if (buff[0] == EOF)
+		if (strcmp(buff, "env") == 0)
+		{
+			_printenv();
 			continue;
+		}
 
 		if (strcmp(buff, "\0") == 0)
 			continue;

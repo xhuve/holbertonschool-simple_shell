@@ -14,6 +14,21 @@ void free_args(char *s[])
 	free(s);
 }
 
+int _printenv(void)
+{
+	int i;
+
+	if (environ == NULL)
+		return (-1);
+
+	for(i = 0; environ[i] != NULL; i++)
+	{
+		printf("%s\n", environ[i]);
+	}
+
+	return (0);
+}
+
 void trim_space(char *s)
 {
 	int i = 0, j = 0;
