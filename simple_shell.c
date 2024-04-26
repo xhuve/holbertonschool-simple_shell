@@ -24,6 +24,9 @@ int main(void)
             exit(EXIT_FAILURE);
         }
 
+		if (buff[0] == ' ')
+			trim_space(buff);
+
 		if (buff[0] == EOF)
 			continue;
 

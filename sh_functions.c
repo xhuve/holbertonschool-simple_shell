@@ -14,36 +14,22 @@ void free_args(char *s[])
 	free(s);
 }
 
-char *_getenv(char *var)
+void trim_space(char *s)
 {
-	int i, len = 0;
+	int i = 0, j = 0;
 	char *copy;
 
-	if (environ == NULL)
+	copy = strdup(s);
+
+	while (s[i] == ' ')
+		i++;
+
+	for (j = 0; s[i] != '\0'; j++)
 	{
-		return (NULL);
+		copy[j] = s[i];
+		i++;
 	}
-
-	copy = malloc(sizeof(char) * strlen(var) + 2);
-	if (copy == NULL)
-		return (NULL);
-
-	strcpy(copy, var);
-	strcat(copy, "=");
-
-	len = strlen(copy);
-
-	for (i = 0; environ[i] != NULL; i++)
-	{
-		if(strstr(environ[i], copy) != NULL)
-		{
-			free(copy);
-			return (environ[i] + len);
-		}
-	}
-
 	free(copy);
-	return (NULL);
 }
 
 int execute(char *cmd_arr[])

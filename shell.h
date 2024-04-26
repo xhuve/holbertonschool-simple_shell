@@ -19,6 +19,8 @@ char *_getenv(char *var);
 /*command path */
 char *command_path(char *cmd);
 
+void trim_space(char *s);
+
 /* shell functions and commands */
 int command_tok(char *line);
 int execute(char *cmd_arr[]);
