@@ -23,4 +23,6 @@ char *command_path(char *cmd);
 int command_read(char *s[]);
 int execute(char *cmd_arr[]);
 
+void free_args(char *s[]);
+
 #endif

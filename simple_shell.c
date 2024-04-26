@@ -2,24 +2,32 @@
 
 int main(void)
 {
+	int istty, cmd_state;
+	char *exec_args[128];
+
 	while(1)
-	{
-		int istty;
-		char *exec_args[128];
-		
+	{		
 		istty = isatty(STDIN_FILENO);
 
 		if (istty == 1)
 			printf("$ ");
 
-		if (command_read(exec_args) != 0)
-			exit(EXIT_FAILURE);
+		cmd_state = command_read(exec_args);
+		
+		if (cmd_state == -1)
+		{
+			exit(0);
+		}
 
-		if (*exec_args[0] == '\n')
+		if (cmd_state == 3)
 			continue;
 
-		if(execute(exec_args) != 0)
-			exit(EXIT_FAILURE);
+		if (cmd_state == 4)
+		{
+			free_args(exec_args);
+			exit(EXIT_SUCCESS);
+		}
+
 
 		if (istty != 1)
 			break;

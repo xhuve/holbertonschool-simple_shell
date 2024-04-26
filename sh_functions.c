@@ -99,10 +99,23 @@ char *command_path(char *cmd)
 		free(copy);
 	}
 
-	free(path);
+	free(path); 
 	return (NULL);
 }
 
+void free_args(char *s[])
+{
+	int i = 0;
+
+	while (s[i] != NULL)
+	{
+		printf("Ran %d times\n", i + 1);
+		free(*s + i);
+		i++;
+	}
+
+	free(s);
+}
 
 int execute(char *cmd_arr[])
 {
@@ -113,6 +126,7 @@ int execute(char *cmd_arr[])
 	{
 		if(execve(cmd_arr[0], cmd_arr, environ) == -1) 
 		{
+			free_args(cmd_arr);
 			perror("execve failed");
 			return (-1);
 		}
@@ -136,13 +150,19 @@ int command_read(char *s[])
 		return (-1);
 	}
 
-	token = strtok(buff, "\t\n");
-
-	if (strcmp(buff, "exit") == 0)
+	if (strcmp(buff, "\n") == 0)
 	{
 		free(buff);
-		exit(EXIT_SUCCESS);
+		return (3);
 	}
+
+	if (strcmp(buff, "exit\n") == 0)
+	{
+		free(buff);
+		return (4);
+	}
+
+	token = strtok(buff, "\t\n");
 
 	while (token != NULL)
 	{
@@ -154,7 +174,8 @@ int command_read(char *s[])
 		token = strtok(NULL, "\t\n");
 	}
 
+	printf("Buffer: %s\n", buff);
 	s[count] = NULL;
 
-	return (0);
+	return (execute(s));
 }
