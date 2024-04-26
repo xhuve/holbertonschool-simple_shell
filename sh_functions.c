@@ -109,7 +109,6 @@ void free_args(char *s[])
 
 	while (s[i] != NULL)
 	{
-		printf("Ran %d times\n", i + 1);
 		free(*s + i);
 		i++;
 	}
@@ -174,7 +173,6 @@ int command_read(char *s[])
 		token = strtok(NULL, "\t\n");
 	}
 
-	printf("Buffer: %s\n", buff);
 	s[count] = NULL;
 
 	return (execute(s));
