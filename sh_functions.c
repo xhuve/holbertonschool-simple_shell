@@ -14,6 +14,36 @@ void free_args(char *s[])
 	free(s);
 }
 
+char *_getenv(char *var)
+{
+	int i, len;
+	char *copy;
+
+	if (environ == NULL)
+		return (NULL);
+
+	copy = malloc(strlen(var) + 1);
+	if (copy == NULL)
+		return (NULL);
+
+	strcpy(copy, var);
+	strcat(copy, "=");
+
+	len = strlen(copy);
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		if(strstr(environ[i], copy) != NULL)
+		{
+			free(copy);
+			return (environ[i] + len);
+		}
+	}
+
+	free(copy);
+	return (NULL);
+}
+
 int execute(char *cmd_arr[])
 {
 	int status;
@@ -23,11 +53,14 @@ int execute(char *cmd_arr[])
 	{
 		if(execve(cmd_arr[0], cmd_arr, environ) == -1) 
 		{
-			
-			perror("execve failed");
-			return (-1);
+			perror("execve");
+            exit(EXIT_FAILURE);
 		}
-	} else 
+	} else if (child_pid ==-1)
+	{
+		perror("fork");
+		return (-1);
+	} else
 	{
 		wait(&status);
 	}
@@ -35,47 +68,62 @@ int execute(char *cmd_arr[])
 	return (0);
 }
 
-
-int command_read(char *s[])
+char *command_path(char *cmd)
 {
-	int count = 0, value;
-	size_t n = 128;
-	char *buff = NULL, *token;
+	char *copy, *token, *path;
+	struct stat s;
 
-	value = getline(&buff, &n, stdin);
+	path = _getenv("PATH");
+	if (path == NULL)
+		return (NULL);
 
-	if (value == -1)
+	token = strtok(path, ":");
+
+	while(token != NULL)
 	{
-		perror("Error reading input");
-		free(buff);
-		return (-1);
-	}
+		copy = malloc(strlen(token) + strlen(cmd) + 2);
+		if (copy == NULL)
+		{
+			free(copy);
+			return (NULL);
+		}
+		strcpy(copy, token);
+		strcat(copy, "/");
+		strcat(copy, cmd);
 
-	if (strcmp(buff, "\n") == 0)
-	{
-		free(buff);
-		return (3);
-	}
+		if (stat(copy, &s) == 0)
+		{
+			return (copy);
+		} else
+			continue;
 
-	if (strcmp(buff, "exit\n") == 0)
-	{
-		free(buff);
-		return (4);
+		free(copy);
+		token = strtok(NULL, ":");
 	}
+	free(path); 
+	return (NULL);
+}
 
-	token = strtok(buff, "\t\n");
+
+int command_tok(char *line)
+{
+	int count = 0;
+	char *exec_args[128], *token;
+
+	token = strtok(line, " ");
 
 	while (token != NULL)
 	{
-/*		if (count == 0)
-			s[count] = command_path(token);
-		else */
-		s[count] = token;
+		if (count == 0)
+			exec_args[count] = command_path(token);
+		else
+			exec_args[count] = token;
+
 		count++;
-		token = strtok(NULL, "\t\n");
+		token = strtok(NULL, " ");
 	}
 
-	s[count] = NULL;
+	exec_args[count] = NULL;
 
-	return (execute(s));
+	return (execute(exec_args));
 }

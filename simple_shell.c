@@ -2,34 +2,43 @@
 
 int main(void)
 {
-	int istty, cmd_state;
-	char *exec_args[128];
+	int chars_read, istty;
+	char *buff = NULL;
+	size_t size = 0;
+
 
 	while(1)
-	{		
+	{
 		istty = isatty(STDIN_FILENO);
 
 		if (istty == 1)
 			printf("$ ");
 
-		cmd_state = command_read(exec_args);
-		
-		if (cmd_state == -1)
-		{
-			free(*exec_args);
-			exit(0);
-		}
+		chars_read = getline(&buff, &size, stdin);
 
-		if (cmd_state == 3)
+		if (chars_read == -1)
+		{
+            perror("Error reading input");
+            if (buff)
+                free(buff);
+            exit(EXIT_FAILURE);
+        }
+
+		if (strcmp(buff, "\0") == 0)
 			continue;
 
-		if (cmd_state == 4)
+		if (strcmp(buff, "exit\n") == 0)
 			break;
+
+		if (buff[chars_read - 1] == '\n')
+			buff[chars_read - 1] = '\0';
+
+		command_tok(buff);
 
 		if (istty != 1)
 			break;
 
-
 	}
+	free(buff);
 	return (0);
 }

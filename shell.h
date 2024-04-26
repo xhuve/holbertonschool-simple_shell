@@ -20,7 +20,7 @@ char *_getenv(char *var);
 char *command_path(char *cmd);
 
 /* shell functions and commands */
-int command_read(char *s[]);
+int command_tok(char *line);
 int execute(char *cmd_arr[]);
 
 void free_args(char *s[]);
