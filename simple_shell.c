@@ -16,6 +16,7 @@ int main(void)
 		
 		if (cmd_state == -1)
 		{
+			free(*exec_args);
 			exit(0);
 		}
 
@@ -23,16 +24,12 @@ int main(void)
 			continue;
 
 		if (cmd_state == 4)
-		{
-			free_args(exec_args);
-			exit(EXIT_SUCCESS);
-		}
-
+			break;
 
 		if (istty != 1)
 			break;
 
-		free(*exec_args);
+
 	}
 	return (0);
 }
