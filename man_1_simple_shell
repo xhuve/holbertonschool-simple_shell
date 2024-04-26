@@ -1,0 +1,48 @@
+.TH SHELL 1 "April 2023" "Unix User Manual"
+.SH NAME
+shell \- a simple shell program in C
+.SH SYNOPSIS
+.B ./shell
+.SH DESCRIPTION
+The shell is a simple command-line interpreter that reads commands from the user and executes them. It supports executing external commands with command-line arguments, as well as implementing the built-in commands 'env' and 'exit'.
+.PP
+The shell provides the following features:
+.TP
+o
+Execute external commands with command-line arguments
+.TP
+o
+Implement the 'env' built-in command to print the environment variables
+.TP
+o
+Implement the 'exit' built-in command to terminate the shell
+.TP
+o
+Support interactive mode (reading commands from the terminal) and non-interactive mode (reading commands from a file or pipe)
+.SH "BUILT-IN COMMANDS"
+.TP
+.B env
+Print the environment variables to the standard output.
+.TP
+.B exit
+Terminate the shell process.
+.SH LIMITATIONS
+The shell has several limitations:
+.TP
+o
+It does not handle input/output redirection or piping.
+.TP
+o
+It does not support complex command syntax (e.g., parentheses, logical operators).
+.TP
+o
+It does not implement any advanced features like aliases, history, or tab completion.
+.TP
+o
+Error handling and memory management could be improved.
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+The shell was written by [Your Name].
+.SH "SEE ALSO"
+sh(1), bash(1)
